@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.Group?>
+<VBox spacing="10" alignment="CENTER" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.MainController">
+
+    <fx:define>
+        <ToggleGroup fx:id="textOrFileGroup"/>
+        <ToggleGroup fx:id="encryptOrDecryptGroup"/>
+    </fx:define>
+
+    <Label text="AES Encryptor &amp; Decryptor" />
+
+
+    <RadioButton text="Text" toggleGroup="$textOrFileGroup" selected="true" />
+    <RadioButton text="File" toggleGroup="$textOrFileGroup" />
+
+    <Button text="Read from file" />
+
+    <Button text="Write to file" />
+
+    <TextArea fx:id="plainText"
+              promptText="Plain text"
+              prefHeight="100"
+              prefWidth="300"/>
+
+    <TextField fx:id="keyField"
+               promptText="Enter key"
+               prefWidth="300"/>
+
+    <Button text="Generate key" />
+    <Button text="Load key from file" />
+    <Button text="Save key to file" />
+
+    <RadioButton text="Encrypt" toggleGroup="$encryptOrDecryptGroup" selected="true" />
+    <RadioButton text="Decrypt" toggleGroup="$encryptOrDecryptGroup" />
+
+    <Button text="Generate"
+            onAction="#generate"/>
+
+    <TextArea fx:id="encryptedText"
+              promptText="Encrypted text"
+              prefHeight="100"
+              prefWidth="300"
+              editable="false"/>
+
+</VBox>
