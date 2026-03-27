@@ -15,12 +15,11 @@
     <Label text="AES Encryptor &amp; Decryptor" />
 
 
-    <RadioButton text="Text" toggleGroup="$textOrFileGroup" selected="true" />
-    <RadioButton text="File" toggleGroup="$textOrFileGroup" />
+    <RadioButton fx:id="textRadio" text="Text" toggleGroup="$textOrFileGroup" />
+    <RadioButton fx:id="fileRadio" text="File" toggleGroup="$textOrFileGroup" selected="true" />
 
-    <Button text="Read from file" />
-
-    <Button text="Write to file" />
+    <Button fx:id="readFileButton1" text="Read from file" />
+    <Button fx:id="writeFileButton1" text="Write to file" />
 
     <TextArea fx:id="plainText"
               promptText="Plain text"
@@ -35,11 +34,14 @@
     <Button text="Load key from file" />
     <Button text="Save key to file" />
 
-    <RadioButton text="Encrypt" toggleGroup="$encryptOrDecryptGroup" selected="true" />
-    <RadioButton text="Decrypt" toggleGroup="$encryptOrDecryptGroup" />
+    <Button fx:id="readFileButton2" text="Read from file" />
+    <Button fx:id="writeFileButton2" text="Write to file" />
 
     <Button text="Generate"
             onAction="#generate"/>
+
+    <Button text="Read from file" />
+    <Button text="Write to file" />
 
     <TextArea fx:id="encryptedText"
               promptText="Encrypted text"
