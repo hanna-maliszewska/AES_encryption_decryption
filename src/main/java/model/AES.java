@@ -61,4 +61,47 @@ public class AES {
 
         return helper;
     }
+
+    public static byte mul2(byte x) {
+        int val = x & 0xFF;
+
+        int res = x << 1;
+
+        if ((val & 0x80) != 0) {
+            res ^= 0x1b;
+        }
+
+        return (byte) (res & 0xFF);
+    }
+
+    public static byte mul3(byte x) {
+        byte val = mul2(x);
+        val ^= x;
+
+        return val;
+    }
+
+    public static void mixColumn(byte[][] state, int col) {
+        byte a = state[0][col];
+        byte b = state[1][col];
+        byte c = state[2][col];
+        byte d = state[3][col];
+
+        byte new0 = (byte) (mul2(a) ^ mul3(b) ^ c ^ d);
+        byte new1 = (byte) (a ^ mul2(b) ^ mul3(c) ^ d);
+        byte new2 = (byte) (a ^ b ^ mul2(c) ^ mul3(d));
+        byte new3 = (byte) (mul3(a) ^ b ^ c ^ mul2(d));
+
+        state[0][col] = new0;
+        state[1][col] = new1;
+        state[2][col] = new2;
+        state[3][col] = new3;
+    }
+
+    public static byte[][] mixColumns(byte[][] state) {
+        for (int col = 0; col < 4; col++) {
+            mixColumn(state, col);
+        }
+        return state;
+    }
 }
