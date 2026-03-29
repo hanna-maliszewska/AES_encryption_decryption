@@ -201,6 +201,7 @@ public class AES {
     }
 
     public static byte[] encrypt(byte[] input, byte[] key) {
+        int Nr = key.length / 4 + 6;
         byte[][] state = toState(input);
 
         byte[][] words = KeyExpansion.expandKey(key);
@@ -209,8 +210,8 @@ public class AES {
         byte[][] roundKey = KeyExpansion.getRoundKey(words, 0);
         addRoundKey(state, roundKey);
 
-        // rounds 1 - 9
-        for (int round = 1; round <= 9; round++) {
+        // rounds 1 - Nr
+        for (int round = 1; round < Nr; round++) {
             subBytes(state);
             shiftRows(state);
             mixColumns(state);
@@ -222,23 +223,24 @@ public class AES {
         // final round
         subBytes(state);
         shiftRows(state);
-        roundKey = KeyExpansion.getRoundKey(words, 10);
+        roundKey = KeyExpansion.getRoundKey(words, Nr);
         addRoundKey(state, roundKey);
 
         return fromState(state);
     }
 
     public static byte[] decrypt(byte[] input, byte[] key) {
+        int Nr = key.length / 4 + 6;
         byte[][] state = toState(input);
 
         byte[][] words = KeyExpansion.expandKey(key);
 
-        // round 10
-        byte[][] roundKey = KeyExpansion.getRoundKey(words, 10);
+        // round Nr
+        byte[][] roundKey = KeyExpansion.getRoundKey(words, Nr);
         addRoundKey(state, roundKey);
 
-        // rounds 9 - 1
-        for (int round = 9; round >= 1; round--) {
+        // rounds Nr-1 -> 1
+        for (int round = Nr - 1; round >= 1; round--) {
             inverseShiftRows(state);
             inverseSubBytes(state);
 

@@ -52,8 +52,8 @@
         </VBox>
 
         <VBox spacing="15" alignment="TOP_CENTER" >
-            <Button fx:id="encryptButton" text="&lt;- Encrypt" onAction="#encrypt" />
-            <Button fx:id="decryptButton" text="Decrypt -&gt;" onAction="#decrypt" />
+            <Button fx:id="encryptButton" text="Encrypt -&gt;" onAction="#encrypt" />
+            <Button fx:id="decryptButton" text="&lt;- Decrypt" onAction="#decrypt" />
         </VBox>
 
         <VBox spacing="15" alignment="CENTER">
