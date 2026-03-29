@@ -140,12 +140,12 @@ public class MainController {
             encryptedText.setText("Generate key first!");
             return;
         }
-        
+
         try {
             byte[] input = plainText.getText().getBytes();
             byte[] key = hexToBytes(keyField.getText());
 
-            byte[] result = AES.encrypt(input, key);
+            byte[] result = AES.encryptData(input, key);
 
             encryptedText.setText(bytesToHex(result));
         } catch (Exception e) {
@@ -157,5 +157,36 @@ public class MainController {
     public void decrypt() {
         String text = encryptedText.getText();
         plainText.setText("DECRYPTED: " + text);
+    }
+
+    public static byte[] addPadding(byte[] input) {
+        int blockSize = 16;
+        int padding = blockSize - (input.length % blockSize);
+
+        byte[] output = new byte[input.length + padding];
+
+        // copy
+        for (int i = 0; i < input.length; i++) {
+            output[i] = input[i];
+        }
+
+        // add padding
+        for (int i = input.length; i < output.length; i++) {
+            output[i] = (byte) padding;
+        }
+
+        return output;
+    }
+
+    public static byte[] removePadding(byte[] input) {
+        int padding = input[input.length - 1] & 0xFF;
+
+        byte[] output = new byte[input.length - padding];
+
+        for (int i = 0; i < output.length; i++) {
+            output[i] = input[i];
+        }
+
+        return output;
     }
 }

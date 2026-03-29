@@ -1,5 +1,8 @@
 package model;
 
+import app.MainApp;
+import controller.MainController;
+
 public class AES {
     public static byte[][] toState(byte[] input) {
         byte[][] state = new byte[4][4];
@@ -141,5 +144,28 @@ public class AES {
         addRoundKey(state, roundKey);
 
         return fromState(state);
+    }
+
+    public static byte[] encryptData(byte[] input, byte[] key) {
+        byte[] padded = MainController.addPadding(input);
+        byte[] output = new byte[padded.length];
+
+        for (int i = 0; i < padded.length; i += 16) {
+            byte[] block = new byte[16];
+
+            // kopiuj blok
+            for (int j = 0; j < 16; j++) {
+                block[j] = padded[i + j];
+            }
+
+            byte[] encrypted = encrypt(block, key);
+
+            // zapisz wynik
+            for (int j = 0; j < 16; j++) {
+                output[i + j] = encrypted[j];
+            }
+        }
+
+        return output;
     }
 }
