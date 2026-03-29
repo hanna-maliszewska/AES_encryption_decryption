@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.Group?>
+
 <VBox spacing="10" alignment="CENTER" xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.MainController">
 
@@ -13,40 +14,59 @@
     </fx:define>
 
     <Label text="AES Encryptor &amp; Decryptor" />
-
-
-    <RadioButton fx:id="textRadio" text="Text" toggleGroup="$textOrFileGroup" />
-    <RadioButton fx:id="fileRadio" text="File" toggleGroup="$textOrFileGroup" selected="true" />
-
-    <Button fx:id="readFileButton1" text="Read from file" />
-    <Button fx:id="writeFileButton1" text="Write to file" />
-
-    <TextArea fx:id="plainText"
-              promptText="Plain text"
-              prefHeight="100"
-              prefWidth="300"/>
-
     <TextField fx:id="keyField"
                promptText="Enter key"
-               prefWidth="300"/>
+               maxWidth="300"
+               minWidth="200"/>
 
-    <Button text="Generate key" />
-    <Button text="Load key from file" />
-    <Button text="Save key to file" />
+    <Label text="Generate key" />
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="128 bit" fx:id="generate128Button" onAction="#generate128" />
+        <Button text="192 bit" fx:id="generate192Button" onAction="#generate192" />
+        <Button text="256 bit" fx:id="generate256Button" onAction="#generate256" />
+    </HBox>
 
-    <Button fx:id="readFileButton2" text="Read from file" />
-    <Button fx:id="writeFileButton2" text="Write to file" />
+    <Label text="Save / Load key" />
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="Save key" fx:id="saveKeyButton" />
+        <Button text="Load key" fx:id="loadKeyButton" />
+    </HBox>
 
-    <Button text="Generate"
-            onAction="#generate"/>
+    <Label text="Encryption / Decryption" />
+    <HBox spacing="15" alignment="CENTER">
+        <RadioButton fx:id="textRadio" text="Text" toggleGroup="$textOrFileGroup" selected="true" />
+        <RadioButton fx:id="fileRadio" text="File" toggleGroup="$textOrFileGroup"  />
+    </HBox>
 
-    <Button text="Read from file" />
-    <Button text="Write to file" />
+    <HBox spacing="15" alignment="CENTER">
+        <VBox spacing="15" alignment="CENTER">
+            <TextArea fx:id="plainText"
+                      promptText="Plain text"
+                      prefHeight="100"
+                      prefWidth="300"/>
 
-    <TextArea fx:id="encryptedText"
-              promptText="Encrypted text"
-              prefHeight="100"
-              prefWidth="300"
-              editable="false"/>
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="readPlainFileButton" text="Read from file" />
+                <Button fx:id="writePlainFileButton" text="Write to file" />
+            </HBox>
+        </VBox>
 
+        <VBox spacing="15" alignment="TOP_CENTER" >
+            <Button fx:id="encryptButton" text="Encrypt" onAction="#encrypt" />
+            <Button fx:id="decryptButton" text="Decrypt" onAction="#decrypt" />
+        </VBox>
+
+        <VBox spacing="15" alignment="CENTER">
+            <TextArea fx:id="encryptedText"
+                      promptText="Encrypted text"
+                      prefHeight="100"
+                      prefWidth="300"
+                      editable="false"/>
+
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="readEncryptedFileButton" text="Read from file" />
+                <Button fx:id="writeEncryptedFileButton" text="Write to file" />
+            </HBox>
+        </VBox>
+    </HBox>
 </VBox>
