@@ -28,8 +28,8 @@
 
     <Label text="Save / Load key" />
     <HBox spacing="15" alignment="CENTER">
-        <Button text="Save key" fx:id="saveKeyButton" />
-        <Button text="Load key" fx:id="loadKeyButton" />
+        <Button text="Save key" fx:id="saveKeyButton" onAction="#saveKey" />
+        <Button text="Load key" fx:id="loadKeyButton" onAction="#loadKey" />
     </HBox>
 
     <Label text="Encryption / Decryption" />

@@ -113,6 +113,23 @@ public class MainController {
     }
 
     @FXML
+    public void saveKey() throws IOException {
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showSaveDialog(null);
+        byte[] data = keyField.getText().getBytes();
+        Files.write(file.toPath(), data);
+    }
+
+    @FXML
+    public void loadKey() throws IOException {
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showOpenDialog(null);
+
+        byte[] data = Files.readAllBytes(file.toPath());
+        keyField.setText(new String(data));
+    }
+
+    @FXML
     public void initialize() {
         plainText.setEditable(true);
         readPlainFileButton.setDisable(true);
