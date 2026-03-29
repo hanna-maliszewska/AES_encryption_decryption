@@ -64,4 +64,16 @@ public class KeyExpansion{
 
         return words;
     }
+
+    public static byte[][] getRoundKey(byte[][] words, int round) {
+        byte[][] roundKey = new byte[4][4];
+
+        for (int col = 0; col < 4; col++) {
+            for (int row = 0; row < 4; row++) {
+                roundKey[row][col] = words[round * 4 + col][row];
+            }
+        }
+
+        return roundKey;
+    }
 }

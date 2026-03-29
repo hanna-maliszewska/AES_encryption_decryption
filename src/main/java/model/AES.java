@@ -106,4 +106,40 @@ public class AES {
             mixColumn(state, col);
         }
     }
+
+    public static void addRoundKey(byte[][] state, byte[][] roundKey) {
+        for (int row = 0; row < 4; row++) {
+            for (int col = 0; col < 4; col++) {
+                state[row][col] ^= roundKey[row][col];
+            }
+        }
+    }
+
+    public static byte[] encrypt(byte[] input, byte[] key) {
+        byte[][] state = toState(input);
+
+        byte[][] words = KeyExpansion.expandKey(key);
+
+        // round 0
+        byte[][] roundKey = KeyExpansion.getRoundKey(words, 0);
+        addRoundKey(state, roundKey);
+
+        // rounds 1 - 9
+        for (int round = 1; round <= 9; round++) {
+            subBytes(state);
+            shiftRows(state);
+            mixColumns(state);
+
+            roundKey = KeyExpansion.getRoundKey(words, round);
+            addRoundKey(state, roundKey);
+        }
+
+        // final round
+        subBytes(state);
+        shiftRows(state);
+        roundKey = KeyExpansion.getRoundKey(words, 10);
+        addRoundKey(state, roundKey);
+
+        return fromState(state);
+    }
 }
