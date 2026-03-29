@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 public class KeyExpansion{
     private static final int[] Rcon = {
         0x00, 0x01, 0x02, 0x04,
@@ -37,5 +39,29 @@ public class KeyExpansion{
         RotWord(word);
         SubWord(word);
         applyRcon(word, round);
+    }
+
+    public static byte[][] expandKey(byte[] key) {
+        byte[][] words = new byte[44][4];
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                words[i][j] = key[i * 4 + j];
+            }
+        }
+
+        for (int i = 4; i < 44; i++) {
+            byte[] temp = Arrays.copyOf(words[i - 1], 4);
+
+            if (i % 4 == 0) {
+                g(temp, i / 4);
+            }
+
+            for (int j = 0; j < 4; j++) {
+                words[i][j] = (byte) (words[i - 4][j] ^ temp[j]);
+            }
+        }
+
+        return words;
     }
 }
