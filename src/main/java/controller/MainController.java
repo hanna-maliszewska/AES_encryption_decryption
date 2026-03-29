@@ -2,7 +2,12 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import model.AES;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class MainController {
 
@@ -36,9 +41,6 @@ public class MainController {
 
     @FXML
     private TextField keyField;
-
-    @FXML
-    private Button generateKeyButton;
 
     @FXML
     private Button loadKeyButton;
@@ -75,6 +77,40 @@ public class MainController {
 
     @FXML
     private Button decryptButton;
+
+    @FXML
+    public void readPlainFile() throws IOException {
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showOpenDialog(null);
+
+        byte[] data = Files.readAllBytes(file.toPath());
+        plainText.setText(new String(data));
+    }
+
+    @FXML
+    public void readEncryptedFile() throws IOException {
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showOpenDialog(null);
+
+        byte[] data = Files.readAllBytes(file.toPath());
+        encryptedText.setText(bytesToHex(data));
+    }
+
+    @FXML
+    public void writePlainFile() throws IOException {
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showSaveDialog(null);
+        byte[] data = plainText.getText().getBytes();
+        Files.write(file.toPath(), data);
+    }
+
+    @FXML
+    public void writeEncryptedFile() throws IOException {
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showSaveDialog(null);
+        byte[] data = hexToBytes(encryptedText.getText());
+        Files.write(file.toPath(), data);
+    }
 
     @FXML
     public void initialize() {

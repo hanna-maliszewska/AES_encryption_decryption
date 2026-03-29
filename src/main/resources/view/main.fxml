@@ -46,8 +46,8 @@
                       prefWidth="300"/>
 
             <HBox spacing="15" alignment="CENTER">
-                <Button fx:id="readPlainFileButton" text="Read from file" />
-                <Button fx:id="writePlainFileButton" text="Write to file" />
+                <Button fx:id="readPlainFileButton" text="Read from file" onAction="#readPlainFile" />
+                <Button fx:id="writePlainFileButton" text="Write to file" onAction="#writePlainFile" />
             </HBox>
         </VBox>
 
@@ -64,8 +64,8 @@
                       editable="false"/>
 
             <HBox spacing="15" alignment="CENTER">
-                <Button fx:id="readEncryptedFileButton" text="Read from file" />
-                <Button fx:id="writeEncryptedFileButton" text="Write to file" />
+                <Button fx:id="readEncryptedFileButton" text="Read from file" onAction="#readEncryptedFile" />
+                <Button fx:id="writeEncryptedFileButton" text="Write to file" onAction="#writeEncryptedFile" />
             </HBox>
         </VBox>
     </HBox>
