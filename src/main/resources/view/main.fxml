@@ -16,7 +16,7 @@
     <Label text="AES Encryptor &amp; Decryptor" />
     <TextField fx:id="keyField"
                promptText="Enter key"
-               maxWidth="300"
+               maxWidth="500"
                minWidth="200"/>
 
     <Label text="Generate key" />

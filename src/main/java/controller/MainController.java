@@ -112,7 +112,7 @@ public class MainController {
 
     @FXML
     public void generate128() {
-        byte[] key = new byte[16]; // dla 128
+        byte[] key = new byte[16];
         new java.security.SecureRandom().nextBytes(key);
 
         keyField.setText(bytesToHex(key));
@@ -122,16 +122,22 @@ public class MainController {
 
     @FXML
     public void generate192() {
-        String key = "2";
+        byte[] key = new byte[24];
+        new java.security.SecureRandom().nextBytes(key);
 
-        keyField.setText(key);
+        keyField.setText(bytesToHex(key));
+
+        keyField.setText(bytesToHex(key));
     }
 
     @FXML
     public void generate256() {
-        String key = "3";
+        byte[] key = new byte[32];
+        new java.security.SecureRandom().nextBytes(key);
 
-        keyField.setText(key);
+        keyField.setText(bytesToHex(key));
+
+        keyField.setText(bytesToHex(key));
     }
 
     @FXML
@@ -155,8 +161,21 @@ public class MainController {
 
     @FXML
     public void decrypt() {
-        String text = encryptedText.getText();
-        plainText.setText("DECRYPTED: " + text);
+        if (keyField.getText().isEmpty()) {
+            plainText.setText("Generate key first!");
+            return;
+        }
+
+        try {
+            byte[] input = hexToBytes(encryptedText.getText());
+            byte[] key = hexToBytes(keyField.getText());
+
+            byte[] result = AES.decryptData(input, key);
+
+            plainText.setText(new String(result));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static byte[] addPadding(byte[] input) {
