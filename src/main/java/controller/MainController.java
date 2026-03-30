@@ -30,6 +30,9 @@ public class MainController {
         return data;
     }
 
+    private File selectedInputFile = null;
+    private File selectedOutputFile = null;
+
     @FXML
     private RadioButton textRadio;
 
@@ -79,21 +82,21 @@ public class MainController {
     private Button decryptButton;
 
     @FXML
-    public void readPlainFile() throws IOException {
+    public void readPlainFile() {
         FileChooser chooser = new FileChooser();
-        File file = chooser.showOpenDialog(null);
-
-        byte[] data = Files.readAllBytes(file.toPath());
-        plainText.setText(new String(data));
+        selectedInputFile = chooser.showOpenDialog(null);
+        if (selectedInputFile != null) {
+            plainText.setText("file: " + selectedInputFile.getAbsolutePath());
+        }
     }
 
     @FXML
-    public void readEncryptedFile() throws IOException {
+    public void readEncryptedFile() {
         FileChooser chooser = new FileChooser();
-        File file = chooser.showOpenDialog(null);
-
-        byte[] data = Files.readAllBytes(file.toPath());
-        encryptedText.setText(bytesToHex(data));
+        selectedInputFile = chooser.showOpenDialog(null);
+        if (selectedInputFile != null) {
+            encryptedText.setText("encrypted file: " + selectedInputFile.getAbsolutePath());
+        }
     }
 
     @FXML
@@ -201,12 +204,38 @@ public class MainController {
         }
 
         try {
-            byte[] input = plainText.getText().getBytes();
             byte[] key = hexToBytes(keyField.getText());
 
-            byte[] result = AES.encryptData(input, key);
+            if (textRadio.isSelected()) {
+                //TEXT
+                byte[] input = plainText.getText().getBytes();
+                byte[] result = AES.encryptData(input, key);
+                encryptedText.setText(bytesToHex(result));
 
-            encryptedText.setText(bytesToHex(result));
+            } else if (fileRadio.isSelected()) {
+                // FILES
+                if (selectedInputFile == null) {
+                    encryptedText.setText("Choose a file to encrypt first!");
+                    return;
+                }
+
+                // Load bytes from file
+                byte[] fileBytes = Files.readAllBytes(selectedInputFile.toPath());
+
+                // encrypt
+                byte[] encryptedFileBytes = AES.encryptData(fileBytes, key);
+
+                // where to save encrypted file?
+                FileChooser chooser = new FileChooser();
+                selectedOutputFile = chooser.showSaveDialog(null);
+
+                if (selectedOutputFile != null) {
+                    // Save encrypted bytes to file
+                    Files.write(selectedOutputFile.toPath(), encryptedFileBytes);
+                    encryptedText.setText("Encrypted file to: " + selectedOutputFile.getName());
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -220,14 +249,48 @@ public class MainController {
         }
 
         try {
-            byte[] input = hexToBytes(encryptedText.getText());
             byte[] key = hexToBytes(keyField.getText());
 
-            byte[] result = AES.decryptData(input, key);
+            if (textRadio.isSelected()) {
+                // TEXT
+                byte[] input = hexToBytes(encryptedText.getText());
 
-            plainText.setText(new String(result));
+                byte[] result = AES.decryptData(input, key);
+
+                plainText.setText(new String(result));
+
+            } else if (fileRadio.isSelected()) {
+                // FILE
+                if (selectedInputFile == null) {
+                    plainText.setText("Choose a file to decrypt first!");
+                    return;
+                }
+
+                // LOAD bytes from file
+                // no hextobytes just bytes
+                byte[] fileBytes = Files.readAllBytes(selectedInputFile.toPath());
+
+                // decrypt
+                byte[] decryptedFileBytes = AES.decryptData(fileBytes, key);
+
+                // where to save decrypted file?
+                FileChooser chooser = new FileChooser();
+                selectedOutputFile = chooser.showSaveDialog(null);
+
+                if (selectedOutputFile != null) {
+                    // save decrypted bytes to file
+                    Files.write(selectedOutputFile.toPath(), decryptedFileBytes);
+                    plainText.setText("Sukces! Odszyfrowano plik do: " + selectedOutputFile.getAbsolutePath());
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
+            if (fileRadio.isSelected()) {
+                plainText.setText("Error! (wrong key or file).");
+            } else {
+                plainText.setText("Text decryption error!");
+            }
         }
     }
 
