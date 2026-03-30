@@ -280,7 +280,7 @@ public class MainController {
                 if (selectedOutputFile != null) {
                     // save decrypted bytes to file
                     Files.write(selectedOutputFile.toPath(), decryptedFileBytes);
-                    plainText.setText("Sukces! Odszyfrowano plik do: " + selectedOutputFile.getAbsolutePath());
+                    plainText.setText("Success! Decrypted file to: " + selectedOutputFile.getAbsolutePath());
                 }
             }
 
